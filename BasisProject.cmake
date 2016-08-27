@@ -26,7 +26,7 @@ basis_project (
   NAME        "DrawEM"
   PACKAGE     "MIRTK"
   AUTHORS     "Antonios Makropoulos"
-  DESCRIPTION "Segmentation library for the developing brain of the Medical Image Registration ToolKit."
+  DESCRIPTION "Tools for the segmentation of the developing brain"
   COPYRIGHT   "2016 Imperial College London, Antonios Makropoulos"
   LICENSE     "Apache License Version 2.0"
   CONTACT     "Antonios Makropoulos <a.makropoulos11@imperial.ac.uk>"
@@ -35,17 +35,13 @@ basis_project (
   # ----------------------------------------------------------------------------
   # dependencies
   DEPENDS
-    MIRTK{Common,Numerics,Image,Transformation}
-    "VTK-6{
-      vtkCommonCore,
-      vtkCommonDataModel,
-      vtkFiltersCore,
-      vtkFiltersGeneral,
-      vtkImagingCore
-    }"
+    MIRTK{Common,Numerics,Image}
     #<dependency>
+  OPTIONAL_DEPENDS
+    TBB{tbb}
+    #<optional-dependency>
   TOOLS_DEPENDS
-    MIRTK{ImageIO}
+    MIRTK{IO}
   TEST_DEPENDS
     #<test-dependency>
   OPTIONAL_TEST_DEPENDS

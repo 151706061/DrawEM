@@ -17,33 +17,15 @@
  */
 
 
-#ifndef MIRTKNORMALIZENYUL_H_
-#define MIRTKNORMALIZENYUL_H_
+#include "mirtk/Gaussian.h"
 
-#include <mirtkImage.h>
-#include <mirtkRegistration.h>
-#include <mirtkImageHistogram1D.h>
+namespace mirtk {
 
-
-namespace mirtk{
-
-class mirtkNormalizeNyul{
-
-private:
-	RealImage _target;
-	RealImage _source;
-	int _source_padding;
-	int _target_padding;
-
-public:
-	mirtkNormalizeNyul(RealImage source, RealImage target);
-	void SetMask(RealImage source_mask, RealImage target_mask);
-	void SetPadding(int source_padding, int target_padding);
-	static void histogramImage(Histogram1D<RealPixel>* histogram, RealImage* image, double padding);
-	void Run();
-	RealImage GetOutput();
-	RealImage GetTarget();
-};
+void Gaussian::Initialise(const double &mi, const double &sigma)
+{
+	_mi = mi;
+	_sigma = sigma;
+	_norm = 1.0 / (sqrt(sigma) * sqrt(M_PI*2.0));
+}
 
 }
-#endif

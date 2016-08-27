@@ -20,9 +20,8 @@
 # ============================================================================
 
 
-[ $# -eq 2 ] || { echo "usage: $(basename "$0") <subject> <age>" 1>&2; exit 1; }
+[ $# -eq 1 ] || { echo "usage: $(basename "$0") <subject>" 1>&2; exit 1; }
 subj=$1
-age=$2
 
 
 if [ -n "$FSLDIR" ]; then
@@ -40,23 +39,25 @@ run(){
 
 
 sdir=segmentations-data
-dof=dofs/$subj-template-$age-n.dof.gz
 
-mkdir -p $sdir/brain N4 dofs bias || exit 1
+mkdir -p segmentations N4 dofs bias || exit 1
 
 if [ ! -f N4/$subj.nii.gz ];then 
   #convert image and rescale
-  run mirtk convert-image T2/$subj.nii.gz $sdir/brain/$subj.nii.gz -rescale 0 1000 -double 
+  run mirtk convert-image T2/$subj.nii.gz N4/${subj}_rescaled.nii.gz -rescale 0 1000 -double 
 
-  if [ ! -f $sdir/brain/${subj}_brain_mask.nii.gz ];then
-  #brain extract
-  run bet $sdir/brain/$subj.nii.gz $sdir/brain/${subj}_brain.nii.gz -R -f 0.1 -m 
+  if [ ! -f segmentations/${subj}_brain_mask.nii.gz ];then
+    #brain extract
+    run bet N4/${subj}_rescaled.nii.gz segmentations/${subj}_brain.nii.gz -R -f 0.1 -m 
+    rm segmentations/${subj}_brain.nii.gz
   fi
 
   #bias correct
-  run $DRAWEMDIR/ThirdParty/ITK/N4 3 -i $sdir/brain/$subj.nii.gz -x $sdir/brain/${subj}_brain_mask.nii.gz -o "[N4/$subj.nii.gz,bias/$subj.nii.gz]" -c "[50x50x50,0.001]" -s 2 -b "[100,3]" -t "[0.15,0.01,200]"
-  run mirtk calculate N4/$subj.nii.gz -mul $sdir/brain/${subj}_brain_mask.nii.gz -out N4/$subj.nii.gz 
+  run $DRAWEMDIR/ThirdParty/ITK/N4 3 -i N4/${subj}_rescaled.nii.gz -x segmentations/${subj}_brain_mask.nii.gz -o "[N4/${subj}_corr.nii.gz,bias/$subj.nii.gz]" -c "[50x50x50,0.001]" -s 2 -b "[100,3]" -t "[0.15,0.01,200]"
+  run mirtk calculate N4/${subj}_corr.nii.gz -mul segmentations/${subj}_brain_mask.nii.gz -out N4/${subj}_corr.nii.gz 
   
   #rescale image
-  run mirtk convert-image N4/$subj.nii.gz N4/$subj.nii.gz -rescale 0 1000 -double 
+  run mirtk convert-image N4/${subj}_corr.nii.gz N4/$subj.nii.gz -rescale 0 1000 -double 
+
+  rm N4/${subj}_rescaled.nii.gz N4/${subj}_corr.nii.gz
 fi

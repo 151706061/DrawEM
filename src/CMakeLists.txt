@@ -18,46 +18,44 @@
 # limitations under the License.
 # ============================================================================
 
-
 set(HEADERS
-  mirtkBiasCorrection.h
-  mirtkBiasField.h
-  mirtkBSplineBiasField.h
-  mirtkDrawEM.h
-  mirtkEMBase.h
-  mirtkHashProbabilisticAtlas.h
-  mirtkImageHistogram1D.h
-  mirtkGaussian.h
-  mirtkKMeans.h
-  mirtkMeanShift.h
-  mirtkNormalizeNyul.h
-  mirtkPolynomialBiasField.h
-  mirtkProbabilisticAtlas.h
+  ${BINARY_INCLUDE_DIR}/mirtk/${PROJECT_NAME}Export.h
+  BiasCorrection.h
+  BiasField.h
+  BSplineBiasField.h
+  DrawEM.h
+  EMBase.h
+  HashProbabilisticAtlas.h
+  ImageHistogram1D.h
+  Gaussian.h
+  KMeans.h
+  MeanShift.h
+  NormalizeNyul.h
+  PolynomialBiasField.h
+  ProbabilisticAtlas.h
 )
 
 set(SOURCES
-  mirtkBiasCorrection.cc
-  mirtkBiasField.cc
-  mirtkBSplineBiasField.cc
-  mirtkDrawEM.cc
-  mirtkEMBase.cc
-  mirtkHashProbabilisticAtlas.cc
-  mirtkImageHistogram1D.cc
-  mirtkGaussian.cc
-  mirtkKMeans.cc
-  mirtkMeanShift.cc
-  mirtkNormalizeNyul.cc
-  mirtkPolynomialBiasField.cc
-  mirtkProbabilisticAtlas.cc
+  BiasCorrection.cc
+  BiasField.cc
+  BSplineBiasField.cc
+  DrawEM.cc
+  EMBase.cc
+  HashProbabilisticAtlas.cc
+  ImageHistogram1D.cc
+  Gaussian.cc
+  KMeans.cc
+  MeanShift.cc
+  NormalizeNyul.cc
+  PolynomialBiasField.cc
+  ProbabilisticAtlas.cc
 )
 
 set(DEPENDS
   LibCommon
   LibNumerics
   LibImage
-  LibPointSet
+  LibIO
 )
 
-mirtk_add_library()
-
-
+mirtk_add_library(AUTO_REGISTER)

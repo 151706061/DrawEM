@@ -17,46 +17,33 @@
  */
 
 
-#ifndef _MIRTKGAUSSIAN_H
+#ifndef MIRTKNORMALIZENYUL_H_
+#define MIRTKNORMALIZENYUL_H_
 
-#define _MIRTKGAUSSIAN_H
+#include "mirtk/Image.h"
+//#include "mirtk/Registration.h"
+#include "mirtk/ImageHistogram1D.h"
 
-#include <mirtkImage.h>
-
-/**
-
-multivariate gaussian probability distribution
-
- */
 
 namespace mirtk {
 
-class mirtkGaussian : public Object
-{
-	mirtkObjectMacro(mirtkGaussian);
+class NormalizeNyul{
 
-protected:
-
-	double _mi;
-	double _sigma;
-	double _norm;
+private:
+	RealImage _target;
+	RealImage _source;
+	int _source_padding;
+	int _target_padding;
 
 public:
-
-	void Initialise(const double &mi, const double &sigma);
-	double Evaluate(const double &x);
-	double GetNorm();
+	NormalizeNyul(RealImage source, RealImage target);
+	void SetMask(RealImage source_mask, RealImage target_mask);
+	void SetPadding(int source_padding, int target_padding);
+	static void histogramImage(Histogram1D<RealPixel>* histogram, RealImage* image, double padding);
+	void Run();
+	RealImage GetOutput();
+	RealImage GetTarget();
 };
-
-inline double mirtkGaussian::Evaluate(const double &x)
-{
-	return _norm * exp(-((x - _mi) * (x - _mi)) / (2.0 * _sigma));
-}
-
-inline double mirtkGaussian::GetNorm()
-{
-	return _norm;
-}
 
 }
 #endif
